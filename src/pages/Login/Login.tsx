@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import {auth, InvalidLoginError, parseLogin} from "../../helpers";
 import {useDispatch} from "react-redux";
 import {setLogin} from "../../store";
@@ -9,7 +9,8 @@ export const Login = () => {
     const navigate = useNavigate();
     const [value, setValue] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
-    const tryToLogin = () => {
+    const tryToLogin = (e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         try {
             const result = parseLogin(value);
             dispatch(setLogin(result));

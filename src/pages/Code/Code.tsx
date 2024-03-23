@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
 import {checkCode, Login, NotCorrectCodeError, parseCode} from "../../helpers";
@@ -24,7 +24,8 @@ export const Code = () => {
 
     const title = getTitles(login);
 
-    const check = () => {
+    const check = (e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         try {
             const code = parseCode(value);
             checkCode(login, code)
