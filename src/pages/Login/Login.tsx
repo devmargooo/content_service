@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {auth, isEmail, isPhone} from "../../helpers";
+import {auth, parseLogin} from "../../helpers";
 import {useDispatch} from "react-redux";
 import {setLogin} from "../../store";
 import { useNavigate } from 'react-router-dom';
@@ -9,14 +9,14 @@ export const Login = () => {
     const navigate = useNavigate();
     const [value, setValue] = useState<string>('');
     const [notValid, setNotValid] = useState<boolean>(false);
-    const validate = () => isPhone(value) || isEmail(value);
     const tryToLogin = () => {
-        if (validate()) {
-            dispatch(setLogin(value));
-            auth(value).then(() => {
+        try {
+            const result = parseLogin(value);
+            dispatch(setLogin(result));
+            auth(result).then(() => {
                 navigate('/code');
             })
-        } else {
+        } catch (e) {
             setNotValid(true);
         }
     }

@@ -1,10 +1,8 @@
 import {configureStore, createSlice, PayloadAction} from '@reduxjs/toolkit';
-
-type Email = string;
-type Phone = string;
+import {Login} from "./helpers";
 
 interface UserState {
-    login: Email | Phone | undefined;
+    login: Login | undefined;
 }
 
 const initialState: UserState = {
@@ -15,7 +13,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setLogin(state, action: PayloadAction<string>) {
+        setLogin(state, action: PayloadAction<Login>) {
             state.login = action.payload;
         },
     },

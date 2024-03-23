@@ -2,16 +2,13 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
-import {checkCode, isEmail, isPhone} from "../../helpers";
+import {checkCode, Login} from "../../helpers";
 
-const getTitles = (value:string) => {
-    if (isPhone(value)) {
-        return 'Введите код из смс'
+const getTitles = (value:Login) => {
+    switch (value.type) {
+        case 'email': return 'Введите код из письма'
+        case 'phone': return 'Введите код из смс'
     }
-    if (isEmail(value)) {
-        return 'Введите код из письма'
-    }
-    // ???
 }
 
 export const Code = () => {
@@ -28,15 +25,6 @@ export const Code = () => {
     const title = getTitles(login);
 
     const check = () => {
-        if (!isEmail(login) && !isPhone(login)) {
-            return; // ???
-        }
-        if (!isEmail(login) && !isPhone(login)) {
-            return; // ???
-        }
-        if (!isEmail(login) && !isPhone(login)) {
-            return; // ???
-        }
         checkCode(login, value)
             .then(() => { navigate('/home');})
             .catch(() => setError(true));
