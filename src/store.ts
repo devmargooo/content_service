@@ -1,8 +1,10 @@
 import {configureStore, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
+type Email = string;
+type Phone = string;
 
 interface UserState {
-    login: string | undefined;
+    login: Email | Phone | undefined;
 }
 
 const initialState: UserState = {
