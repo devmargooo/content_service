@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import {auth, isEmail, isPhone} from "../../helpers";
 import {useDispatch} from "react-redux";
 import {setLogin} from "../../store";
@@ -10,7 +10,8 @@ export const Login = () => {
     const [value, setValue] = useState<string>('');
     const [notValid, setNotValid] = useState<boolean>(false);
     const validate = () => isPhone(value) || isEmail(value);
-    const tryToLogin = () => {
+    const tryToLogin = (e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (validate()) {
             dispatch(setLogin(value));
             auth(value).then(() => {

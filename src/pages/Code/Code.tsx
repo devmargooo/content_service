@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
 import {checkCode, isEmail, isPhone} from "../../helpers";
@@ -27,7 +27,8 @@ export const Code = () => {
 
     const title = getTitles(login);
 
-    const check = () => {
+    const check = (e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (!isEmail(login) && !isPhone(login)) {
             return; // ???
         }
