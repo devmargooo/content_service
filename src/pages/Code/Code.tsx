@@ -1,15 +1,25 @@
 import {useNavigate} from "react-router-dom";
 import {FormEvent, useState} from "react";
 import {useSelector} from "react-redux";
-import {RootState} from "../../store";
+import {RootState, UserState} from "../../store";
 import {checkEmailCode, checkSmsCode} from "../../helpers";
+
+const getTitle = (user:Pick<UserState, 'phone' | 'email'>) => {
+    if (user.phone) {
+        return 'Введите код из смс';
+    }
+    if (user.email) {
+        return 'Введите код из письма';
+    }
+    // ???
+}
 
 export const Code = () => {
     const navigate = useNavigate();
     const [value, setValue] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
     const user = useSelector((state: RootState) => state.user);
-    const title = user.phone ? 'Введите код из смс' : 'Введите код из письма' ; // ???
+    const title = getTitle(user);
     const goToHomePage = () => navigate('/home');
 
     if (!user.phone && !user.email) { // ???
@@ -22,10 +32,14 @@ export const Code = () => {
             checkSmsCode(value)
                 .then(goToHomePage)
                 .catch(() => setError(true));
-        } // ???
-        checkEmailCode(value)
-            .then(goToHomePage)
-
+        }
+        if (user.email) {
+            checkEmailCode(value)
+                .then(goToHomePage)
+                .catch(() => setError(true));
+        }
+        // ???
+    };
     return (
         <form onSubmit={check}>
             <h1>{title}</h1>

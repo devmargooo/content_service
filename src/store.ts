@@ -1,7 +1,7 @@
 import {configureStore, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 
-interface UserState {
+export interface UserState {
     phone: string | undefined;
     email: string | undefined;
 }
