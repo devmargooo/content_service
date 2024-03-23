@@ -2,7 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
-import {checkCode, Login} from "../../helpers";
+import {checkCode, Login, NotCorrectCodeError, parseCode} from "../../helpers";
 
 const getTitles = (value:Login) => {
     switch (value.type) {
@@ -14,7 +14,7 @@ const getTitles = (value:Login) => {
 export const Code = () => {
     const navigate = useNavigate();
     const [value, setValue] = useState<string>('');
-    const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState<string | undefined>();
     const login = useSelector((state: RootState) => state.user.login);
 
     if (!login) {
@@ -25,9 +25,18 @@ export const Code = () => {
     const title = getTitles(login);
 
     const check = () => {
-        checkCode(login, value)
-            .then(() => { navigate('/home');})
-            .catch(() => setError(true));
+        try {
+            const code = parseCode(value);
+            checkCode(login, code)
+                .then(() => { navigate('/home');})
+                .catch(() => setError('Неверный код'));
+        } catch (e) {
+            if (e instanceof NotCorrectCodeError) {
+                setError(e.message);
+                return;
+            }
+            setError('Неизвестная ошибка');
+        }
     };
     return (
         <form onSubmit={check}>
