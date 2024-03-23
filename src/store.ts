@@ -2,24 +2,29 @@ import {configureStore, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 
 interface UserState {
-    login: string | undefined;
+    phone: string | undefined;
+    email: string | undefined;
 }
 
 const initialState: UserState = {
-    login: undefined,
+    phone: undefined,
+    email: undefined,
 };
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setLogin(state, action: PayloadAction<string>) {
-            state.login = action.payload;
+        setPhone(state, action: PayloadAction<string>) {
+            state.phone = action.payload;
+        },
+        setEmail(state, action: PayloadAction<string>) {
+            state.email = action.payload;
         },
     },
 });
 
-export const { setLogin } = userSlice.actions;
+export const { setPhone, setEmail } = userSlice.actions;
 
 const store = configureStore({
     reducer: {

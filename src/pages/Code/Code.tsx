@@ -1,43 +1,31 @@
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
-import {checkCode, isEmail, isPhone} from "../../helpers";
-
-const getTitles = (value:string) => {
-    if (isPhone(value)) {
-        return 'Введите код из смс'
-    }
-    if (isEmail(value)) {
-        return 'Введите код из письма'
-    }
-    // ???
-}
+import {checkEmailCode, checkSmsCode} from "../../helpers";
 
 export const Code = () => {
     const navigate = useNavigate();
     const [value, setValue] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
-    const login = useSelector((state: RootState) => state.user.login);
+    const user = useSelector((state: RootState) => state.user);
+    const title = user.phone ? 'Введите код из смс' : 'Введите код из письма' ; // ???
+    const goToHomePage = () => navigate('/home');
 
-    if (!login) {
+    if (!user.phone && !user.email) { // ???
         navigate('/');
         return null;
     }
+    const check = (e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (user.phone) {
+            checkSmsCode(value)
+                .then(goToHomePage)
+                .catch(() => setError(true));
+        } // ???
+        checkEmailCode(value)
+            .then(goToHomePage)
 
-    const title = getTitles(login);
-
-    const check = () => {
-        if (!isEmail(login) && !isPhone(login)) {
-            return; // ???
-        }
-        if (!isEmail(login) && !isPhone(login)) {
-            return; // ???
-        }
-        checkCode(login, value)
-            .then(() => { navigate('/home');})
-            .catch(() => setError(true));
-    };
     return (
         <form onSubmit={check}>
             <h1>{title}</h1>
