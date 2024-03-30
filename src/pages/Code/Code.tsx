@@ -32,9 +32,6 @@ export const Code = () => {
         if (!isEmail(login) && !isPhone(login)) {
             return; // ???
         }
-        if (!isEmail(login) && !isPhone(login)) {
-            return; // ???
-        }
         checkCode(login, value)
             .then(() => { navigate('/home');})
             .catch(() => setError(true));
